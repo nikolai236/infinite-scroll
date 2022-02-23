@@ -1,19 +1,19 @@
-const fs = require('fs')
-const async = require('async')
-const stream = require('stream')
-const path = require('path')
+const fs = require('fs');
+const async = require('async');
+const stream = require('stream');
+const path = require('path');
 
 const getImage = async (filename, res) => {
     const read = fs.createReadStream(
         path.resolve(__dirname, '..', 'images', filename)
-    )
-    const pass = new stream.PassThrough()
+    );
+    const pass = new stream.PassThrough();
     stream.pipeline(
         read,
         pass,
         err => {
             if(err) {
-                console.log(err)
+                console.log(err);
                 throw err;
             }
         }
