@@ -17,7 +17,7 @@ const getImage = async (filename, res) => {
                 throw err;
             }
         }
-    )
+    );
     pass.pipe(res);
 }
 
