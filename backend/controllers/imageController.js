@@ -1,24 +1,28 @@
 const fs = require('fs');
-const async = require('async');
-const stream = require('stream');
 const path = require('path');
 
-const getImage = async (filename, res) => {
+const getImage = (filename, res) => {
     const read = fs.createReadStream(
         path.resolve(__dirname, '..', 'images', filename)
     );
-    const pass = new stream.PassThrough();
-    stream.pipeline(
-        read,
-        pass,
-        err => {
-            if(err) {
-                console.log(err);
-                throw err;
-            }
-        }
-    );
-    pass.pipe(res);
+    
+    return new Promise((resolve, reject) => {
+        read.on('data', (chunk) => {
+            res.write(chunk);
+        });
+
+        read.on('error', () => {
+
+           res.status(404).send(err);
+            reject(err)
+        });
+
+        read.on('end', () => {
+            res.end();
+            resolve()
+        })
+        .catch(console.log);
+    });
 }
 
 const getSingleImage = async (req, res) => {
