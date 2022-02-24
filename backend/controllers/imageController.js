@@ -7,22 +7,17 @@ const getImage = (filename, res) => {
     );
     
     return new Promise((resolve, reject) => {
-        read.on('data', (chunk) => {
-            res.write(chunk);
-        });
+        read.pipe(res);
 
         read.on('error', () => {
 
-           res.status(404).send(err);
-            reject(err)
+           res.status(404);
+           reject(err);
         });
 
-        read.on('end', () => {
-            res.end();
-            resolve()
-        })
-        .catch(console.log);
-    });
+        read.on('end', reslove);
+    })
+    .catch(console.log);
 }
 
 const getSingleImage = async (req, res) => {
