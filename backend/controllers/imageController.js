@@ -9,7 +9,7 @@ const getImage = (filename, res) => {
     return new Promise((resolve, reject) => {
         read.pipe(res);
 
-        read.on('error', () => {
+        read.on('error', (err) => {
 
            res.status(404);
            reject(err);
