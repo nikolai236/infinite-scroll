@@ -15,7 +15,7 @@ const getImage = (filename, res) => {
            reject(err);
         });
 
-        read.on('end', reslove);
+        read.on('end', resolve);
     })
     .catch(console.log);
 }
