@@ -1,4 +1,4 @@
-import { useState, useRef} from 'react';
+import { useRef} from 'react';
 import { useIntersectObserver } from '../hooks/useIntersectObserver';
 import Image from './Image';
 
@@ -18,11 +18,8 @@ export default function ImageContainer(props) {
     )
 
     return (
-        <>
-            
-            {4 && 
-                <Image id={props.id} forwardRef={image} />
-            }
+        <>   
+            <Image id={props.id} forwardRef={image} />
         </>
     )
 }

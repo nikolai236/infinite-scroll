@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useApi } from '../hooks/useApi';
+import { useImages } from '../hooks/useImages';
 import ImageContainer from './ImageContainer';
+import { useFavourites } from '../hooks/useFavourites';
 
 export default function Images() {
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState([]);
     const [page, setPage] = useState(1);
     const [favourites, setFavourites] = useState([]);
-    const { getPage, deleteImage } = useApi();
-    
+    const { getPage, deleteImage } = useImages();
+    const { addFavourite, removeFavourite } = useFavourites();
+
+    console.log(images);
 
     useEffect(() => {
         (async () => {
@@ -37,12 +40,12 @@ export default function Images() {
         const done = await deleteImage(name);
 
         if(done) {
-            setImages(images.filter(i => i !== name));
+            setImages(images.filter(i => i.name !== name));
         }
         setLoading(false);
     }
 
-    const handleAddFavourite = e => {
+    const handleAddFavourite = async (e) => {
         const { name } = e.target;
 
         if(!favourites) return;
@@ -51,12 +54,40 @@ export default function Images() {
         if(favourites.includes(name)) {
             setFavourites(favourites.filter(i => i !== name));
 
+            
+
+            await removeFavourite(name);
+
+            const newImages = images.map(i => {
+                if(i.name === name) return {
+                    name,
+                    likes: i.likes - 1,
+                }
+                return i;
+            });
+            setImages(newImages);
+
             e.target.checked = false;
         } else {
             setFavourites( prev => {
                 prev.push(name)
                 return prev;
             });
+
+            await addFavourite(name);
+            
+            const newImages = images.map(i => {
+                console.log(i);
+                if(i.name === name) return {
+                    name,
+                    likes: i.likes + 1,
+                } 
+                return i;
+            })
+            setImages(newImages);
+
+            console.log(images);
+
             e.target.checked = true;
         }
     }
@@ -73,23 +104,25 @@ export default function Images() {
                         // }}
                     >
                         <ImageContainer 
-                            id={image}
+                            id={image.name}
                             onLoad={() => onLoad(i)}
                         />
                         <div className='btn-group mb-3 d-block'>
                             <button
                                 type='button'
-                                name={image}
+                                name={image.name}
                                 className='btn btn-danger mr-3 position-sticky'
                                 onClick={handleDelete}
                             > delete</button>
                             <input 
                                 type='radio'
-                                name={image}
+                                name={image.name}
                                 //className=''
                                 onClick={handleAddFavourite}
                                 //defaultChecked={false}
                             />
+                            <label>likes: {image.likes} </label>
+                            
                         </div>
                     </div>
                 )
