@@ -3,9 +3,11 @@ import { fileURLToPath } from 'node:url'
 import * as path from 'node:path';
 import * as db from '../models/Favorites.js';
 
+import { Request, Response } from 'express';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const getImage = async (filename, res) => {
+const getImage = async (filename: string, res: Response) => {
     const read = fs.createReadStream(
         path.resolve(__dirname, '..', '..', 'images', filename)
     );
@@ -24,7 +26,7 @@ const getImage = async (filename, res) => {
     .catch(console.log);
 }
 
-export const getSingleImage = async (req, res) => {
+export const getSingleImage = async (req: Request, res: Response) => {
     try {
         await getImage(req.params.filename, res);
     } catch(err) {
@@ -34,14 +36,14 @@ export const getSingleImage = async (req, res) => {
     }
 }
 
-export const getPage = async (req, res) => {
+export const getPage = async (req: Request, res: Response) => {
     try {
 
-        const { page } = req.params;
+        const page = parseInt(req.params.page);
         const images = fs
             .readdirSync(path.resolve(__dirname, '..', '..', 'images'))
             .slice(page* 5, page*5 + 10)
-            .map(name => {
+            .map((name): db.Image => {
                 const likes = db.getImageLikesByName(name);
 
                 return {
@@ -59,7 +61,7 @@ export const getPage = async (req, res) => {
     }
 }
 
-export const deleteImage = async (req, res) => {
+export const deleteImage = async (req: Request, res: Response) => {
     try {
         const { filename } = req.params;
         const filepath = path.resolve(__dirname, '..', '..', 'images', filename);

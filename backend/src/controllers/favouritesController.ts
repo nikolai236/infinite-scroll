@@ -1,6 +1,8 @@
 import * as db from '../models/Favorites.js';
 
-export const addFavourite = (req, res) => {
+import { Request, Response } from 'express';
+
+export const addFavourite = (req: Request, res: Response) => {
     try {
         const { filename } = req.params;
 
@@ -16,7 +18,7 @@ export const addFavourite = (req, res) => {
     }
 }
 
-export const removeFavourite = (req, res) => {
+export const removeFavourite = (req: Request, res: Response) => {
     try {
         const { filename } = req.params;
 
