@@ -1,4 +1,4 @@
-import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useImages, Image } from '../hooks/useImages';
 import ImageContainer from './ImageContainer';
 import { useFavourites } from '../hooks/useFavourites';
@@ -28,12 +28,12 @@ export default function Images() {
         }
     }
 
-
     const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         const button = e.currentTarget;
         const { name } = button;
+
 
         setLoading(true);
         const done = await deleteImage(name);
@@ -66,7 +66,8 @@ export default function Images() {
             });
             setImages(newImages);
 
-            e.currentTarget.checked = false;
+            const target = e.target as HTMLInputElement;
+            target.checked = false;
         } else {
             setFavourites( prev => {
                 prev.push(name)
@@ -85,9 +86,8 @@ export default function Images() {
             })
             setImages(newImages);
 
-            console.log(images);
-
-            e.currentTarget.checked = true;
+            const target = e.target as HTMLInputElement;
+            target.checked = true;
         }
     }
 
@@ -113,11 +113,13 @@ export default function Images() {
                                 className='btn btn-danger mr-3 position-sticky'
                                 onClick={handleDelete}
                             > delete</button>
-                            <div className="form-check">
+                            <div 
+                                //className="form-check"
+                            >
                                 <input 
                                     type='checkbox'
                                     name={image.name}
-                                    className='form-check-input'
+                                    //className='form-check-input'
                                     onClick={handleAddFavourite}
                                 />
                                 <label 
