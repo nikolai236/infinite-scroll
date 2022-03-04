@@ -34,6 +34,9 @@ export default function Images() {
         const button = e.currentTarget;
         const { name } = button;
 
+        const checkbox = button.parentElement.querySelector('input');
+        checkbox.checked = false;
+
 
         setLoading(true);
         const done = await deleteImage(name);
