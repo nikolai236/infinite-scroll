@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-interface Image {
+export interface Image {
     name: string;
     likes: number;
 }
